@@ -1,0 +1,32 @@
+<form class="border container-fluid bg-white " th:fragment="createNew" method="post"
+      th:action="'/admin/create'">
+
+    <div style="width: 500px; text-align: center; margin-left: auto;margin-right: auto">
+        <h4>Имя</h4>
+        <input type="text" name="name" placeholder="Введите имя пользователя" class="form-control"><br>
+        <h4>Фамилия</h4>
+        <input type="text" name="lastName" placeholder="Введите фамилию пользователя" class="form-control"><br>
+        <h4>Возраст</h4>
+        <input type="number" name="age" placeholder="Введите возраст" class="form-control"><br>
+        <h4>Email</h4>
+        <input type="email" name="email" placeholder="Введите почту" class="form-control"><br>
+        <h4>Пароль</h4>
+        <input type="password" name="password" placeholder="Введите пароль" class="form-control"><br>
+        <h4>Роль</h4>
+
+        <select required class="form-select" multiple name="stringRoleList" id="roles">
+            <option th:each="role : ${rolesAll}" th:value="${role.getId()}" th:text="${role.getRole()}"></option>
+        </select>
+        <button style="margin: 40px 40px 40px 40px" type="submit" class="btn btn-success  btn-lg ">Добавить
+            пользователя
+        </button>
+    </div>
+    <script th:inline="javascript">
+        //Замена  ROLE_ на ''
+        const userRoles = document.getElementById('roles');
+        let options = userRoles.options;
+        for (let i = 0; i < options.length; i++) {
+            options[i].innerText = options[i].innerText.replace(/ROLE_/gi, '')
+        }
+    </script>
+</form>

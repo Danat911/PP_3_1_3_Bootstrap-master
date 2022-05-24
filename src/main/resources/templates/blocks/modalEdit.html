@@ -1,0 +1,120 @@
+<!--    Модальное окно-->
+
+<div th:fragment="modalEdit">
+    <div class="modal fade" id="staticBackdropEdit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Редактирование пользователя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div style="text-align: center" class="container mt-5 mb-5">
+
+                        <form th:method="patch" action="'/'" id="form">
+                            <h5>ID</h5>
+
+                            <input type="text" name="id" id="id"
+                                   placeholder="Введите id"
+                                   class="form-control" disabled>
+
+                            <h5>Имя</h5>
+                            <input type="text" id="name" name="name"
+                                   placeholder="Введите имя пользователя"
+                                   class="form-control">
+
+                            <h5>Фамилия</h5>
+                            <input type="text" id="lastName" name="lastName"
+                                   placeholder="Введите фамилию пользователя" class="form-control">
+
+                            <h5>Возраст</h5>
+                            <input type="number" id="age" name="age"
+                                   placeholder="Введите возраст пользователя" class="form-control">
+
+                            <h5>Email</h5>
+                            <input type="email" id="email" name="email"
+                                   placeholder="Введите электронную почту пользователя" class="form-control">
+
+                            <h5>Пароль</h5>
+                            <input type="password" id="password" name="password"
+                                   placeholder="Введите пароль пользователя" onfocus="this.value=''" class="form-control">
+
+                            <h5>Роли</h5>
+                            <select class="form-select" multiple name="stringRoleList" id="rolesModal">
+                                <option class="option" th:each="role : ${rolesAll}" th:value="${role.getId()}"
+                                        th:text="${role.getRole()}"></option>
+                            </select>
+                        </form>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button form="form" type="submit" class="btn btn-primary" id="buttonEdit">Редактировать</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        const staticBackdropEdit = document.getElementById('staticBackdropEdit');
+        staticBackdropEdit.addEventListener('show.bs.modal', function (event) {
+
+            let users = /*[[${users}]]*/
+                console.log();
+            let button = event.relatedTarget
+            let count = button.getAttribute('data-bs-whatever');
+            console.log(count)
+
+            let form = document.getElementById('form')
+            form.setAttribute('action', '/admin/edit/' + users[count].id)
+
+            let userId = document.getElementById('id')
+            userId.setAttribute('value', users[count].id)
+
+            let userName = document.getElementById('name')
+            userName.setAttribute('value', users[count].name)
+
+            let userLastName = document.getElementById('lastName')
+            userLastName.setAttribute('value', users[count].lastName)
+
+            let userAge = document.getElementById('age')
+            userAge.setAttribute('value', users[count].age)
+
+            let userEmail = document.getElementById('email')
+            userEmail.setAttribute('value', users[count].email)
+
+            //Заполнение формы пароля
+            let userPassword = document.getElementById('password')
+            userPassword.setAttribute('value', users[count].password)
+
+
+            let userRoles = document.getElementById('rolesModal');
+            let options = userRoles.options;
+
+            let selected = Array.from(userRoles.options)
+                .filter(option => option.selected)
+                .map(option => option.value);
+
+
+            for (let i = 0; i < options.length; i++) {
+                for (let j = 0; j < selected.length; j++) {
+                    if (options[i].value == selected[j]) {
+                        userRoles.options[i].setAttribute('selected', true)
+                    }
+                }
+            }
+
+            for (let i = 0; i < options.length; i++) {
+                options[i].innerText = options[i].innerText.replace(/ROLE_/gi, '')
+            }
+
+
+        })
+
+
+    </script>
+</div>

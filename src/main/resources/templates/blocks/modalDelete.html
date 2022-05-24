@@ -1,0 +1,109 @@
+<!--    Модальное окно-->
+<div th:fragment="modalDelete">
+    <div class="modal fade" id="staticBackdropDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Удаление пользователя</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <div style="text-align: center" class="container mt-5 mb-5">
+
+                        <form th:method="delete" action="'/'" id="formD"  >
+                            <h5>ID</h5>
+
+                            <input type="text" name="id" id="idD"
+                                   placeholder="Введите id"
+                                   class="form-control" disabled>
+
+                            <h5>Имя</h5>
+                            <input type="text" id="nameD" name="name"
+                                   placeholder="Введите имя пользователя"
+                                   class="form-control" disabled>
+
+                            <h5>Фамилия</h5>
+                            <input type="text" id="lastNameD" name="lastName"
+                                   placeholder="Введите фамилию пользователя" class="form-control" disabled>
+
+                            <h5>Возраст</h5>
+                            <input type="number" id="ageD" name="age"
+                                   placeholder="Введите возраст пользователя" class="form-control" disabled>
+
+                            <h5>Email</h5>
+                            <input type="email" id="emailD" name="email"
+                                   placeholder="Введите электронную почту пользователя" class="form-control" disabled>
+
+
+                            <h5>Роли</h5>
+                            <select class="form-select" multiple name="stringRoleList" id="rolesModalD" disabled>
+                                <option class="option" th:each="role : ${rolesAll}" th:value="${role.getId()}"
+                                        th:text="${role.getRole()}"></option>
+                            </select>
+                        </form>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button form="formD" type="submit" class="btn btn-danger">Удалить</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        // Заполнение полей модального окна
+        const staticBackdropDelete = document.getElementById('staticBackdropDelete');
+        staticBackdropDelete.addEventListener('show.bs.modal', function (event) {
+            let users = /*[[${users}]]*/
+                console.log();
+            let button = event.relatedTarget;
+            let count = button.getAttribute('data-bs-whatever')
+
+            let form = document.getElementById('formD')
+            form.setAttribute('action', '/admin/delete/' + users[count].id)
+
+            let userId = document.getElementById('idD')
+            userId.setAttribute('value', users[count].id)
+
+            let userName = document.getElementById('nameD')
+            userName.setAttribute('value', users[count].name)
+
+            let userLastName = document.getElementById('lastNameD')
+            userLastName.setAttribute('value', users[count].lastName)
+
+            let userAge = document.getElementById('ageD')
+            userAge.setAttribute('value', users[count].age)
+
+            let userEmail = document.getElementById('emailD')
+            userEmail.setAttribute('value', users[count].email)
+
+
+            let userRoles = document.getElementById('rolesModalD');
+            let options = userRoles.options;
+
+            let selected = Array.from(userRoles.options)
+                .filter(option => option.selected)
+                .map(option => option.value);
+
+
+            for (let i = 0; i < options.length; i++) {
+                for (let j = 0; j < selected.length; j++) {
+                    if (options[i].value == selected[j]) {
+                        userRoles.options[i].setAttribute('selected', true)
+                    }
+                }
+            }
+
+            for (let i = 0; i < options.length; i++) {
+                options[i].innerText = options[i].innerText.replace(/ROLE_/gi, '')
+            }
+
+        })
+
+    </script>
+</div>
